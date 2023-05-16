@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     m_robot(new Robot(this)),
     m_videoWidget(new VideoWidget(this)),
-    m_hostLineEdit(new QLineEdit(this)),
-    m_portLineEdit(new QLineEdit(this)),
     m_connectButton(new QPushButton("Connect", this)),
     m_disconnectButton(new QPushButton("Disconnect", this)),
     m_forwardButton(new QPushButton("Forward", this)),
@@ -19,8 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_rightButton(new QPushButton("Right", this))
 {
     QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget(m_hostLineEdit);
-    layout->addWidget(m_portLineEdit);
     layout->addWidget(m_connectButton);
     layout->addWidget(m_disconnectButton);
     layout->addWidget(m_forwardButton);
@@ -44,8 +40,6 @@ MainWindow::~MainWindow()
 {
     delete m_robot;
     delete m_videoWidget;
-    delete m_hostLineEdit;
-    delete m_portLineEdit;
     delete m_connectButton;
     delete m_disconnectButton;
     delete m_forwardButton;
@@ -56,9 +50,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectToRobot()
 {
-    QString host = m_hostLineEdit->text();
-    int port = m_portLineEdit->text().toInt();
-    m_robot->connectToRobot(host, port);
+    m_robot->connectToRobot();
 }
 
 void MainWindow::disconnectFromRobot()
