@@ -32,7 +32,7 @@ void Robot::connectToRobot()
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
-    socket->connectToHost("192.168.10.1", 5002); // connection to wifibot
+    socket->connectToHost("192.168.1.106", 15020); // connection to wifibot
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
@@ -48,20 +48,48 @@ void Robot::disconnectFromRobot()
     socket->close();
 }
 
-void Robot::moveForward()
+void Robot::moveForward(short speed1, short speed2)
 {
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[4] = (unsigned char) speed2;
+
+    DataToSend[6] = (unsigned char)(80);
+    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) crc;
+    DataToSend[8] = (unsigned char) (crc >> 8);
 }
 
-void Robot::moveBackward()
+void Robot::moveBackward(short speed1, short speed2)
 {
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[4] = (unsigned char) speed2;
+
+    DataToSend[6] = (unsigned char)(0);
+    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) crc;
+    DataToSend[8] = (unsigned char) (crc >> 8);
 }
 
-void Robot::turnLeft()
+void Robot::turnRight(short speed1, short speed2)
 {
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[4] = (unsigned char) speed2;
+
+    DataToSend[6] = (unsigned char)(64);
+    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) crc;
+    DataToSend[8] = (unsigned char) (crc >> 8);
 }
 
-void Robot::turnRight()
+void Robot::turnLeft(short speed1, short speed2)
 {
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[4] = (unsigned char) speed2;
+
+    DataToSend[6] = (unsigned char)(16);
+    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) crc;
+    DataToSend[8] = (unsigned char) (crc >> 8);
 }
 
 void Robot::connected() {
@@ -80,7 +108,7 @@ void Robot::readyRead() {
     qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
-    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
+    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2]<< DataReceived[3];
 }
 
 void Robot::MyTimerSlot() {
@@ -88,4 +116,25 @@ void Robot::MyTimerSlot() {
     while(Mutex.tryLock());
     socket->write(DataToSend);
     Mutex.unlock();
+}
+
+short Robot::Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max){
+    unsigned int Crc = 0xFFFF;
+    unsigned int Polynome = 0xA001;
+    unsigned int CptOctet = 0;
+    unsigned int CptBit = 0;
+    unsigned int Parity = 0;
+
+    Crc = 0xFFFF;
+    Polynome = 0xA001;
+    for (CptOctet=0; CptOctet<Taille_Max;CptOctet++){
+        Crc ^= *(_Adresse_tab + CptOctet);
+
+        for(CptBit=0;CptBit<=7;CptBit++){
+            Parity = Crc;
+            Crc >>=1;
+            if(Parity%2 == true) Crc ^= Polynome;
+        }
+    }
+    return (Crc);
 }
