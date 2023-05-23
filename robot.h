@@ -18,10 +18,11 @@ public:
 
     void connectToRobot();
     void disconnectFromRobot();
-    void moveForward();
-    void moveBackward();
-    void turnLeft();
-    void turnRight();
+    void moveForward(short speed1, short speed2);
+    void moveBackward(short speed1, short speed2);
+    void turnLeft(short speed1, short speed2);
+    void turnRight(short speed1, short speed2);
+    short Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max);
     QByteArray DataToSend;
     QByteArray DataReceived;
     QMutex Mutex;

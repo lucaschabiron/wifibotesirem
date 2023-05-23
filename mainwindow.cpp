@@ -60,21 +60,21 @@ void MainWindow::disconnectFromRobot()
 
 void MainWindow::moveRobotForward()
 {
-    m_robot->moveForward();
+    m_robot->moveForward(150, 150);
 }
 
 void MainWindow::moveRobotBackward()
 {
-    m_robot->moveBackward();
+    m_robot->moveBackward(150, 150 );
 }
 
 void MainWindow::turnRobotLeft()
 {
-    m_robot->turnLeft();
+    m_robot->turnLeft(150, 150);
 }
 
 void MainWindow::turnRobotRight()
 {
-    m_robot->turnRight();
+    m_robot->turnRight(150, 150);
 }
 
