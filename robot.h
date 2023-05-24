@@ -15,7 +15,7 @@ class Robot : public QObject
 public:
     explicit Robot(QObject *parent = nullptr);
     ~Robot();
-
+    void resetData();
     void connectToRobot();
     void disconnectFromRobot();
     void moveForward(short speed1, short speed2);

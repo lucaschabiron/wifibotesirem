@@ -4,6 +4,18 @@ Robot::Robot(QObject *parent)
     : QObject(parent)
 {
     DataToSend.resize(9);
+    resetData();
+    DataReceived.resize(21);
+    TimerEnvoi = new QTimer();
+    // setup signal and slot
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
+}
+
+Robot::~Robot()
+{
+}
+
+void Robot::resetData(){
     DataToSend[0] = 0xFF;
     DataToSend[1] = 0x07;
     DataToSend[2] = 0x0;
@@ -13,14 +25,6 @@ Robot::Robot(QObject *parent)
     DataToSend[6] = 0x0;
     DataToSend[7] = 0x0;
     DataToSend[8] = 0x0;
-    DataReceived.resize(21);
-    TimerEnvoi = new QTimer();
-    // setup signal and slot
-    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
-}
-
-Robot::~Robot()
-{
 }
 
 void Robot::connectToRobot()
@@ -44,6 +48,7 @@ void Robot::connectToRobot()
 
 void Robot::disconnectFromRobot()
 {
+    resetData();
     TimerEnvoi->stop();
     socket->close();
 }
