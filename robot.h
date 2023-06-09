@@ -26,9 +26,22 @@ public:
     QByteArray DataToSend;
     QByteArray DataReceived;
     QMutex Mutex;
+    float battery;
+    struct SidedRobotData {
+        int SpeedFront;
+        int IR;
+        int IR2;
+        long odometry;
+    };
+    SidedRobotData dataR;
+    SidedRobotData dataL;
 private:
     QTcpSocket *socket;
     QTimer *TimerEnvoi;
+    void updateInfos();
+    void updateBattery();
+    void updateSpeed();
+    void updateIR();
 
 signals:
     void updateUI(const QByteArray Data);
