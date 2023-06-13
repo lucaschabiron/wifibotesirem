@@ -18,6 +18,7 @@ set(PROJECT_SOURCES
         mainwindow.h
         robot.h robot.cpp
         videowidget.h videowidget.cpp
+        mainwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
