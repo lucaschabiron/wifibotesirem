@@ -4,6 +4,18 @@ Robot::Robot(QObject *parent)
     : QObject(parent)
 {
     DataToSend.resize(9);
+    resetData();
+    DataReceived.resize(21);
+    TimerEnvoi = new QTimer();
+    // setup signal and slot
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
+}
+
+Robot::~Robot()
+{
+}
+
+void Robot::resetData(){
     DataToSend[0] = 0xFF;
     DataToSend[1] = 0x07;
     DataToSend[2] = 0x0;
@@ -13,14 +25,6 @@ Robot::Robot(QObject *parent)
     DataToSend[6] = 0x0;
     DataToSend[7] = 0x0;
     DataToSend[8] = 0x0;
-    DataReceived.resize(21);
-    TimerEnvoi = new QTimer();
-    // setup signal and slot
-    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
-}
-
-Robot::~Robot()
-{
 }
 
 void Robot::connectToRobot()
@@ -42,8 +46,44 @@ void Robot::connectToRobot()
 
 }
 
+void Robot::updateBattery(){
+    float maxVoltage = 10.1; // maximum voltage (battery full)
+    float minVoltage = 1.28; // minimum voltage (battery empty)
+    float scaleFactor = 4.0; // the original value is scaled down by this factor
+
+    // Convert unsigned char back to voltage (value * scaleFactor)
+    float batVoltage = static_cast<float>(static_cast<unsigned char>(DataReceived[2])) * scaleFactor / 100.0;
+    float batteryLevel = ((batVoltage - minVoltage) / (maxVoltage - minVoltage)) * 100.0;
+    battery = batteryLevel;
+}
+
+void Robot::updateSpeed(){
+    dataL.SpeedFront=(int)(((unsigned char)DataReceived[1] << 8) + (unsigned char)DataReceived[0]);
+    if (dataL.SpeedFront > 32767) dataL.SpeedFront=dataL.SpeedFront-65536;
+    dataR.SpeedFront = (int)(((unsigned char)DataReceived[10] << 8) + (unsigned char)DataReceived[9]);
+    if (dataR.SpeedFront > 32767) {
+        dataR.SpeedFront -= 65536;
+    }
+}
+
+void Robot::updateIR(){
+    dataL.IR = (unsigned char)DataReceived[3];
+    dataL.IR2 = (unsigned char)DataReceived[4];
+    dataR.IR = (unsigned char)DataReceived[11];
+    dataR.IR2 = (unsigned char)DataReceived[12];
+}
+
+void Robot::updateInfos(){
+    updateBattery();
+    updateSpeed();
+    updateIR();
+
+    qDebug() << "Battery: " << battery << ", " << "Left Speed: " << dataL.SpeedFront << "Right Speed" << dataR.SpeedFront << "\n" << "Avant Droit: "<< dataR.IR << "Arriere Droit: " << dataR.IR2 << "Avant Gauche: "<< dataL.IR << "Arriere gauche: " << dataL.IR2;
+}
+
 void Robot::disconnectFromRobot()
 {
+    resetData();
     TimerEnvoi->stop();
     socket->close();
 }
@@ -105,10 +145,10 @@ void Robot::bytesWritten(qint64 bytes) {
 }
 
 void Robot::readyRead() {
-    qDebug() << "reading..."; // read the data from the socket
+    qDebug() << "reading...";
     DataReceived = socket->readAll();
+    updateInfos();
     emit updateUI(DataReceived);
-    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2]<< DataReceived[3];
 }
 
 void Robot::MyTimerSlot() {
