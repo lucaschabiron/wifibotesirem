@@ -11,7 +11,6 @@ namespace Ui
 QT_END_NAMESPACE
 
 class Robot;
-class VideoWidget;
 class QLineEdit;
 class QPushButton;
 
@@ -52,7 +51,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Robot *m_robot;
-    VideoWidget *m_videoWidget;
 };
 
 #endif // MAINWINDOW_H

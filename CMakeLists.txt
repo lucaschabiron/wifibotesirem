@@ -17,7 +17,6 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         robot.h robot.cpp
-        videowidget.h videowidget.cpp
         mainwindow.ui
 )
 

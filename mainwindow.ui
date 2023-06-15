@@ -142,6 +142,13 @@
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Left Speed</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QLCDNumber" name="leftSpeed">
        <property name="font">
@@ -155,20 +162,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Left Speed</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLCDNumber" name="rightSpeed">
-       <property name="segmentStyle">
-        <enum>QLCDNumber::Flat</enum>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -176,8 +169,8 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLCDNumber" name="battery">
+     <item row="1" column="1">
+      <widget class="QLCDNumber" name="rightSpeed">
        <property name="segmentStyle">
         <enum>QLCDNumber::Flat</enum>
        </property>
@@ -190,15 +183,8 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Battery</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLCDNumber" name="speed_4">
+     <item row="2" column="1">
+      <widget class="QLCDNumber" name="battery">
        <property name="segmentStyle">
         <enum>QLCDNumber::Flat</enum>
        </property>
@@ -224,7 +210,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>37</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

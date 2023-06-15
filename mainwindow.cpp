@@ -10,8 +10,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      m_robot(new Robot(this)),
-      m_videoWidget(new VideoWidget(this))
+      m_robot(new Robot(this))
 {
     ui->setupUi(this);
 }
