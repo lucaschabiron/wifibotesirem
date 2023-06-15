@@ -172,7 +172,7 @@ void Robot::MyTimerSlot() {
 }
 
 
-
+//crc function used when sending data
 short Robot::Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max){
     unsigned int Crc = 0xFFFF;
     unsigned int Polynome = 0xA001;

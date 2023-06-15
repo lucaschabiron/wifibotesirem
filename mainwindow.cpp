@@ -43,22 +43,22 @@ void MainWindow::disconnectFromRobot()
 
 void MainWindow::moveRobotForward()
 {
-    m_robot->moveForward(200, 200);
+    m_robot->moveForward(170, 170);
 }
 
 void MainWindow::moveRobotBackward()
 {
-    m_robot->moveBackward(200, 200 );
+    m_robot->moveBackward(170, 170 );
 }
 
 void MainWindow::turnRobotLeft()
 {
-    m_robot->turnLeft(200, 200);
+    m_robot->turnLeft(170, 170);
 }
 
 void MainWindow::turnRobotRight()
 {
-    m_robot->turnRight(200, 200);
+    m_robot->turnRight(170, 170);
 }
 
 
