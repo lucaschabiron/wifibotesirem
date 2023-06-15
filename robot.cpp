@@ -1,4 +1,4 @@
-#include "Robot.h"
+ #include "Robot.h"
 
 Robot::Robot(MainWindow *_parent)
     : QObject(_parent)
@@ -49,13 +49,7 @@ void Robot::connectToRobot()
 }
 
 void Robot::updateBattery(){
-    float maxVoltage = 10.1; // maximum voltage (battery full)
-    float minVoltage = 1.28; // minimum voltage (battery empty)
-    float scaleFactor = 4.0; // the original value is scaled down by this factor
-
-    // Convert unsigned char back to voltage (value * scaleFactor)
-    float batVoltage = static_cast<float>(static_cast<unsigned char>(DataReceived[2])) * scaleFactor / 100.0;
-    float batteryLevel = ((batVoltage - minVoltage) / (maxVoltage - minVoltage)) * 100.0;
+    float batteryLevel = static_cast<float>(static_cast<unsigned char>(DataReceived[2]))/255*100;
     battery = batteryLevel;
 }
 
@@ -94,53 +88,65 @@ void Robot::disconnectFromRobot()
     TimerEnvoi->stop();
     socket->close();
 }
-
+//specific move functions linked to mainwindow
 void Robot::moveForward(short speed1, short speed2)
 {
-    DataToSend[2] = (unsigned char) speed1;
-    DataToSend[4] = (unsigned char) speed2;
-
-    DataToSend[6] = (unsigned char)(80);
-    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
-    DataToSend[7] = (unsigned char) crc;
-    DataToSend[8] = (unsigned char) (crc >> 8);
+    move('F', speed1, speed2);
 }
 
 void Robot::moveBackward(short speed1, short speed2)
 {
-    DataToSend[2] = (unsigned char) speed1;
-    DataToSend[4] = (unsigned char) speed2;
-
-    DataToSend[6] = (unsigned char)(0);
-    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
-    DataToSend[7] = (unsigned char) crc;
-    DataToSend[8] = (unsigned char) (crc >> 8);
+    move('B', speed1, speed2);
 }
 
 void Robot::turnRight(short speed1, short speed2)
 {
-    DataToSend[2] = (unsigned char) speed1;
-    DataToSend[4] = (unsigned char) speed2;
-
-    DataToSend[6] = (unsigned char)(64);
-    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
-    DataToSend[7] = (unsigned char) crc;
-    DataToSend[8] = (unsigned char) (crc >> 8);
+    move('R',speed1,speed2);
 }
 
 void Robot::turnLeft(short speed1, short speed2)
 {
+    move('L',speed1, speed2);
+}
+
+//general move function
+void Robot::move(char direction, short speed1, short speed2){
     DataToSend[2] = (unsigned char) speed1;
     DataToSend[4] = (unsigned char) speed2;
+    if(direction == 'F'){
+        if(frontObstacle) stopMovement();
+        DataToSend[6] = (unsigned char)(80);
+    } else if(direction == 'B'){
+        if(backObstacle) stopMovement();
+        DataToSend[6] = (unsigned char)(0);
 
-    DataToSend[6] = (unsigned char)(16);
+    } else if (direction == 'L'){
+        DataToSend[6] = (unsigned char)(16);
+    } else if (direction == 'R'){
+        DataToSend[6] = (unsigned char)(64);
+    }
+    //crc calculation
     short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) crc;
     DataToSend[8] = (unsigned char) (crc >> 8);
 }
 
+//checks for an obstacle in front or behind the robot
+void Robot::checkObstacle(){
+    if(dataL.IR >150 || dataR.IR > 150){
+        this->frontObstacle = true;
+        return;
+    }
+    if(dataL.IR2 >150){
+        this->backObstacle = true;
+        return;
+    }
+    this->backObstacle =false;
+    this->frontObstacle=false;
+}
+
 void Robot::connected() {
-    qDebug() << "connected..."; // Hey server, tell me about you.
+    qDebug() << "connected...";
 }
 
 void Robot::disconnected() {
@@ -155,11 +161,11 @@ void Robot::readyRead() {
     qDebug() << "reading...";
     DataReceived = socket->readAll();
     updateInfos();
+    checkObstacle();
 }
 
 void Robot::stopMovement(){
     resetData();
-
 }
 
 void Robot::MyTimerSlot() {
@@ -170,7 +176,7 @@ void Robot::MyTimerSlot() {
 }
 
 
-
+//crc function used when sending data
 short Robot::Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max){
     unsigned int Crc = 0xFFFF;
     unsigned int Polynome = 0xA001;

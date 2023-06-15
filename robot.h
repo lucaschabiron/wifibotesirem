@@ -16,6 +16,8 @@ class Robot : public QObject
 public:
     explicit Robot(MainWindow *parent = nullptr);
     ~Robot();
+    void move(char direction, short speed1, short speed2);
+    void checkObstacle();
     void resetData();
     void stopMovement();
     void connectToRobot();
@@ -33,10 +35,12 @@ public:
         int SpeedFront;
         int IR;
         int IR2;
-        long odometry;
     };
     SidedRobotData dataR;
     SidedRobotData dataL;
+    bool frontObstacle;
+    bool backObstacle;
+
 private:
     MainWindow *parent;
     QTcpSocket *socket;
