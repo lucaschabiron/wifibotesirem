@@ -7,13 +7,14 @@
 #include <QDebug>
 #include <QTimer>
 #include <QMutex>
+#include "mainwindow.h"
 
 class Robot : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Robot(QObject *parent = nullptr);
+    explicit Robot(MainWindow *parent = nullptr);
     ~Robot();
     void resetData();
     void stopMovement();
@@ -37,6 +38,7 @@ public:
     SidedRobotData dataR;
     SidedRobotData dataL;
 private:
+    MainWindow *parent;
     QTcpSocket *socket;
     QTimer *TimerEnvoi;
     void updateInfos();

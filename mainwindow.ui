@@ -160,7 +160,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLCDNumber" name="speed_2">
+      <widget class="QLCDNumber" name="rightSpeed">
        <property name="segmentStyle">
         <enum>QLCDNumber::Flat</enum>
        </property>
@@ -174,7 +174,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLCDNumber" name="speed_3">
+      <widget class="QLCDNumber" name="battery">
        <property name="segmentStyle">
         <enum>QLCDNumber::Flat</enum>
        </property>

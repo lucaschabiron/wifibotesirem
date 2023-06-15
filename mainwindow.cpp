@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_videoWidget(new VideoWidget(this))
 {
     ui->setupUi(this);
-    ui->leftSpeed->display(10);
+
 
 
 }
@@ -27,10 +27,6 @@ MainWindow::~MainWindow()
     delete m_robot;
 }
 
-void MainWindow::updateRightSpeed(int speed){
-
-
-}
 void MainWindow::connectToRobot()
 {
     m_robot->connectToRobot();
@@ -43,7 +39,7 @@ void MainWindow::disconnectFromRobot()
 
 void MainWindow::moveRobotForward()
 {
-    m_robot->moveForward(255, 255);
+    m_robot->moveForward(150, 150);
 }
 
 void MainWindow::moveRobotBackward()
@@ -106,3 +102,15 @@ void MainWindow::on_stop_button_clicked()
     m_robot->stopMovement();
 }
 
+
+void MainWindow::updateSpeed(int l, int r){
+
+    ui->leftSpeed->display(l);
+    ui->rightSpeed->display(r);
+
+}
+
+
+void MainWindow::updateBattery(int battery){
+    ui->battery->display(battery);
+}
