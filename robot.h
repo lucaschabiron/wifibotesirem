@@ -16,6 +16,7 @@ public:
     explicit Robot(QObject *parent = nullptr);
     ~Robot();
     void resetData();
+    void stopMovement();
     void connectToRobot();
     void disconnectFromRobot();
     void moveForward(short speed1, short speed2);
@@ -43,7 +44,7 @@ private:
     void updateIR();
 
 signals:
-    void updateUI(const QByteArray Data);
+    void robotDataChanged(SidedRobotData rightData, SidedRobotData leftData, float batteryLevel);
 public slots:
     void connected();
     void disconnected();

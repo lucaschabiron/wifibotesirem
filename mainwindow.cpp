@@ -1,53 +1,36 @@
-#include "MainWindow.h"
 #include "Robot.h"
 #include "VideoWidget.h"
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QObject>
+
+#include "mainwindow.h"
+#include "./ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow),
     m_robot(new Robot(this)),
-    m_videoWidget(new VideoWidget(this)),
-    m_connectButton(new QPushButton("Connect", this)),
-    m_disconnectButton(new QPushButton("Disconnect", this)),
-    m_forwardButton(new QPushButton("Forward", this)),
-    m_backwardButton(new QPushButton("Backward", this)),
-    m_leftButton(new QPushButton("Left", this)),
-    m_rightButton(new QPushButton("Right", this))
+    m_videoWidget(new VideoWidget(this))
 {
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget(m_connectButton);
-    layout->addWidget(m_disconnectButton);
-    layout->addWidget(m_forwardButton);
-    layout->addWidget(m_backwardButton);
-    layout->addWidget(m_leftButton);
-    layout->addWidget(m_rightButton);
+    ui->setupUi(this);
+    ui->leftSpeed->display(10);
 
-    QWidget* widget = new QWidget(this);
-    widget->setLayout(layout);
-    setCentralWidget(widget);
 
-    connect(m_connectButton, &QPushButton::clicked, this, &MainWindow::connectToRobot);
-    connect(m_disconnectButton, &QPushButton::clicked, this, &MainWindow::disconnectFromRobot);
-    connect(m_forwardButton, &QPushButton::clicked, this, &MainWindow::moveRobotForward);
-    connect(m_backwardButton, &QPushButton::clicked, this, &MainWindow::moveRobotBackward);
-    connect(m_leftButton, &QPushButton::clicked, this, &MainWindow::turnRobotLeft);
-    connect(m_rightButton, &QPushButton::clicked, this, &MainWindow::turnRobotRight);
 }
+
 
 MainWindow::~MainWindow()
 {
+    delete ui;
     delete m_robot;
-    delete m_videoWidget;
-    delete m_connectButton;
-    delete m_disconnectButton;
-    delete m_forwardButton;
-    delete m_backwardButton;
-    delete m_leftButton;
-    delete m_rightButton;
 }
 
+void MainWindow::updateRightSpeed(int speed){
+
+
+}
 void MainWindow::connectToRobot()
 {
     m_robot->connectToRobot();
@@ -60,7 +43,7 @@ void MainWindow::disconnectFromRobot()
 
 void MainWindow::moveRobotForward()
 {
-    m_robot->moveForward(150, 150);
+    m_robot->moveForward(255, 255);
 }
 
 void MainWindow::moveRobotBackward()
@@ -76,5 +59,50 @@ void MainWindow::turnRobotLeft()
 void MainWindow::turnRobotRight()
 {
     m_robot->turnRight(150, 150);
+}
+
+
+
+void MainWindow::on_move_forward_button_clicked()
+{
+    moveRobotForward();
+}
+
+
+void MainWindow::on_connect_button_clicked()
+{
+    connectToRobot();
+}
+
+
+void MainWindow::on_disconnect_button_clicked()
+{
+    disconnectFromRobot();
+}
+
+
+void MainWindow::on_move_backward_button_clicked()
+{
+    moveRobotBackward();
+}
+
+
+
+
+void MainWindow::on_turn_right_button_clicked()
+{
+    turnRobotRight();
+}
+
+
+void MainWindow::on_turn_left_button_clicked()
+{
+    turnRobotLeft();
+}
+
+
+void MainWindow::on_stop_button_clicked()
+{
+    m_robot->stopMovement();
 }
 
