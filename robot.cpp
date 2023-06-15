@@ -84,53 +84,65 @@ void Robot::disconnectFromRobot()
     TimerEnvoi->stop();
     socket->close();
 }
-
+//specific move functions linked to mainwindow
 void Robot::moveForward(short speed1, short speed2)
 {
-    DataToSend[2] = (unsigned char) speed1;
-    DataToSend[4] = (unsigned char) speed2;
-
-    DataToSend[6] = (unsigned char)(80);
-    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
-    DataToSend[7] = (unsigned char) crc;
-    DataToSend[8] = (unsigned char) (crc >> 8);
+    move('F', speed1, speed2);
 }
 
 void Robot::moveBackward(short speed1, short speed2)
 {
-    DataToSend[2] = (unsigned char) speed1;
-    DataToSend[4] = (unsigned char) speed2;
-
-    DataToSend[6] = (unsigned char)(0);
-    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
-    DataToSend[7] = (unsigned char) crc;
-    DataToSend[8] = (unsigned char) (crc >> 8);
+    move('B', speed1, speed2);
 }
 
 void Robot::turnRight(short speed1, short speed2)
 {
-    DataToSend[2] = (unsigned char) speed1;
-    DataToSend[4] = (unsigned char) speed2;
-
-    DataToSend[6] = (unsigned char)(64);
-    short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
-    DataToSend[7] = (unsigned char) crc;
-    DataToSend[8] = (unsigned char) (crc >> 8);
+    move('R',speed1,speed2);
 }
 
 void Robot::turnLeft(short speed1, short speed2)
 {
+    move('L',speed1, speed2);
+}
+
+//general move function
+void Robot::move(char direction, short speed1, short speed2){
     DataToSend[2] = (unsigned char) speed1;
     DataToSend[4] = (unsigned char) speed2;
+    if(direction == 'F'){
+        if(frontObstacle) stopMovement();
+        DataToSend[6] = (unsigned char)(80);
+    } else if(direction == 'B'){
+        if(backObstacle) stopMovement();
+        DataToSend[6] = (unsigned char)(0);
 
-    DataToSend[6] = (unsigned char)(16);
+    } else if (direction == 'L'){
+        DataToSend[6] = (unsigned char)(16);
+    } else if (direction == 'R'){
+        DataToSend[6] = (unsigned char)(64);
+    }
+    //crc calculation
     short crc = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) crc;
     DataToSend[8] = (unsigned char) (crc >> 8);
 }
 
+//checks for an obstacle in front or behind the robot
+void Robot::checkObstacle(){
+    if(dataL.IR >150 || dataR.IR > 150){
+        this->frontObstacle = true;
+        return;
+    }
+    if(dataL.IR2 >150){
+        this->backObstacle = true;
+        return;
+    }
+    this->backObstacle =false;
+    this->frontObstacle=false;
+}
+
 void Robot::connected() {
-    qDebug() << "connected..."; // Hey server, tell me about you.
+    qDebug() << "connected...";
 }
 
 void Robot::disconnected() {
@@ -145,11 +157,11 @@ void Robot::readyRead() {
     qDebug() << "reading...";
     DataReceived = socket->readAll();
     updateInfos();
+    checkObstacle();
 }
 
 void Robot::stopMovement(){
     resetData();
-
 }
 
 void Robot::MyTimerSlot() {
