@@ -1,15 +1,15 @@
  #include "Robot.h"
 
-Robot::Robot(QObject *parent)
-    : QObject(parent)
+Robot::Robot(MainWindow *_parent)
+    : QObject(_parent)
 {
+    parent = _parent;
     DataToSend.resize(9);
     resetData();
     DataReceived.resize(21);
     TimerEnvoi = new QTimer();
     // setup signal and slot
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
-
 
 }
 
@@ -73,6 +73,10 @@ void Robot::updateInfos(){
     updateBattery();
     updateSpeed();
     updateIR();
+
+
+    parent->updateSpeed(dataL.SpeedFront, dataR.SpeedFront);
+    parent->updateBattery(battery);
 
 
     qDebug() << "Battery: " << battery << ", " << "Left Speed: " << dataL.SpeedFront << "Right Speed" << dataR.SpeedFront << "\n" << "Avant Droit: "<< dataR.IR << "Arriere Droit: " << dataR.IR2 << "Avant Gauche: "<< dataL.IR << "Arriere gauche: " << dataL.IR2;

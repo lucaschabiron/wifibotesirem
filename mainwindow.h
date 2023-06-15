@@ -22,7 +22,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void updateRightSpeed(int speed);
+    void updateSpeed(int r, int l);
+    void updateBattery(int battery);
+
 
 private slots:
 
@@ -46,7 +48,6 @@ private slots:
     void on_turn_left_button_clicked();
 
     void on_stop_button_clicked();
-
 
 private:
     Ui::MainWindow *ui;
