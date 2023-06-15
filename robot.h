@@ -31,7 +31,6 @@ public:
         int SpeedFront;
         int IR;
         int IR2;
-        long odometry;
     };
     SidedRobotData dataR;
     SidedRobotData dataL;

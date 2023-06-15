@@ -1,4 +1,4 @@
-#include "Robot.h"
+ #include "Robot.h"
 
 Robot::Robot(QObject *parent)
     : QObject(parent)
@@ -47,13 +47,7 @@ void Robot::connectToRobot()
 }
 
 void Robot::updateBattery(){
-    float maxVoltage = 10.1; // maximum voltage (battery full)
-    float minVoltage = 1.28; // minimum voltage (battery empty)
-    float scaleFactor = 4.0; // the original value is scaled down by this factor
-
-    // Convert unsigned char back to voltage (value * scaleFactor)
-    float batVoltage = static_cast<float>(static_cast<unsigned char>(DataReceived[2])) * scaleFactor / 100.0;
-    float batteryLevel = ((batVoltage - minVoltage) / (maxVoltage - minVoltage)) * 100.0;
+    float batteryLevel = static_cast<float>(static_cast<unsigned char>(DataReceived[2]))/255*100;
     battery = batteryLevel;
 }
 
