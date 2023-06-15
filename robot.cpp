@@ -9,6 +9,8 @@ Robot::Robot(QObject *parent)
     TimerEnvoi = new QTimer();
     // setup signal and slot
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
+
+
 }
 
 Robot::~Robot()
@@ -77,6 +79,7 @@ void Robot::updateInfos(){
     updateBattery();
     updateSpeed();
     updateIR();
+
 
     qDebug() << "Battery: " << battery << ", " << "Left Speed: " << dataL.SpeedFront << "Right Speed" << dataR.SpeedFront << "\n" << "Avant Droit: "<< dataR.IR << "Arriere Droit: " << dataR.IR2 << "Avant Gauche: "<< dataL.IR << "Arriere gauche: " << dataL.IR2;
 }
@@ -148,7 +151,11 @@ void Robot::readyRead() {
     qDebug() << "reading...";
     DataReceived = socket->readAll();
     updateInfos();
-    emit updateUI(DataReceived);
+}
+
+void Robot::stopMovement(){
+    resetData();
+
 }
 
 void Robot::MyTimerSlot() {
@@ -157,6 +164,8 @@ void Robot::MyTimerSlot() {
     socket->write(DataToSend);
     Mutex.unlock();
 }
+
+
 
 short Robot::Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max){
     unsigned int Crc = 0xFFFF;

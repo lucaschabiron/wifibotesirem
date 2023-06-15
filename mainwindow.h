@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void updateRightSpeed(int speed);
 
 private slots:
 
@@ -43,6 +44,9 @@ private slots:
     void on_turn_right_button_clicked();
 
     void on_turn_left_button_clicked();
+
+    void on_stop_button_clicked();
+
 
 private:
     Ui::MainWindow *ui;

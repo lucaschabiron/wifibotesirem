@@ -35,20 +35,13 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>210</y>
+      <x>130</x>
+      <y>350</y>
       <width>330</width>
       <height>151</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="2">
-      <widget class="QPushButton" name="stop_button">
-       <property name="text">
-        <string>Stop</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="2">
       <widget class="QPushButton" name="move_backward_button">
        <property name="text">
@@ -56,26 +49,6 @@
        </property>
        <property name="shortcut">
         <string>S</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="turn_left_button">
-       <property name="text">
-        <string>Gauche</string>
-       </property>
-       <property name="shortcut">
-        <string>Q</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QPushButton" name="turn_right_button">
-       <property name="text">
-        <string>Droite</string>
-       </property>
-       <property name="shortcut">
-        <string>D</string>
        </property>
       </widget>
      </item>
@@ -101,14 +74,41 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="3">
+      <widget class="QPushButton" name="turn_right_button">
+       <property name="text">
+        <string>Droite</string>
+       </property>
+       <property name="shortcut">
+        <string>D</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="turn_left_button">
+       <property name="text">
+        <string>Gauche</string>
+       </property>
+       <property name="shortcut">
+        <string>Q</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="stop_button">
+       <property name="text">
+        <string>Stop</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>160</width>
+      <x>579</x>
+      <y>20</y>
+      <width>191</width>
       <height>80</height>
      </rect>
     </property>
@@ -129,15 +129,90 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLCDNumber" name="speed">
+   <widget class="QWidget" name="formLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>150</y>
-      <width>64</width>
-      <height>23</height>
+      <x>580</x>
+      <y>110</y>
+      <width>191</width>
+      <height>134</height>
      </rect>
     </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="1">
+      <widget class="QLCDNumber" name="leftSpeed">
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Left Speed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLCDNumber" name="speed_2">
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Right Speed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLCDNumber" name="speed_3">
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Battery</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Battery</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLCDNumber" name="speed_4">
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>160</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="videoLayout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

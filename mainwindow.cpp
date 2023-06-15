@@ -3,6 +3,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QObject>
+
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
@@ -13,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_videoWidget(new VideoWidget(this))
 {
     ui->setupUi(this);
+    ui->leftSpeed->display(10);
+
+
 }
 
 
@@ -22,6 +27,10 @@ MainWindow::~MainWindow()
     delete m_robot;
 }
 
+void MainWindow::updateRightSpeed(int speed){
+
+
+}
 void MainWindow::connectToRobot()
 {
     m_robot->connectToRobot();
@@ -89,5 +98,11 @@ void MainWindow::on_turn_right_button_clicked()
 void MainWindow::on_turn_left_button_clicked()
 {
     turnRobotLeft();
+}
+
+
+void MainWindow::on_stop_button_clicked()
+{
+    m_robot->stopMovement();
 }
 
